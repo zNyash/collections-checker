@@ -7,9 +7,14 @@
     "dev": "bun run index.ts"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/prompts": "^2.4.9"
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "prompts": "^2.4.2"
   }
 }
