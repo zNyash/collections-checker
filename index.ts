@@ -1,14 +1,11 @@
-// import chalk from "chalk";
+// Classes
 import { OsuPathFinder } from "./classes/OsuPathFinder";
 import { OsuDatabaseParser } from "./classes/OsuDatabaseParser";
-import chalk from "chalk";
-import prompts from "prompts";
 import { Config } from "./classes/Config";
-import { displayCollectionsInfo } from "./utils/displayCollectionsInfo";
 
-class OsuApi {
-    // TODO: Add osu! api
-}
+// Utility functions
+import { displayCollectionsInfo } from "./utils/displayCollectionsInfo";
+import { shouldDownloadBeatmaps } from "./utils/shouldDownloadBeatmaps";
 
 async function main() {
     // Find osu! installation path
@@ -23,30 +20,7 @@ async function main() {
     // await Bun.write("collection-db.json", collectionData.toJson()); // Save collection data to a JSON file
 
     displayCollectionsInfo(collectionData);
-
-    let downloadEverything = false;
-    const response = await prompts({
-        type: "text",
-        name: "download",
-        message: "Do you want to download all the beatmaps? (Y/n):",
-        validate: (value) => {
-            switch (value.toLowerCase().trim()) {
-                case "":
-                    downloadEverything = true;
-                    return true;
-                case "y":
-                case "yes":
-                    downloadEverything = true;
-                    return true;
-                case "n":
-                case "no":
-                    return true;
-                default:
-                    return "Invalid input";
-            }
-        },
-    });
-
+    const downloadEverything = await shouldDownloadBeatmaps();
     if (!downloadEverything) return;
 }
 
