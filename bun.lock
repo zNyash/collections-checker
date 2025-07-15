@@ -6,6 +6,7 @@
       "dependencies": {
         "chalk": "^5.4.1",
         "osu-db-parser": "^2.0.1",
+        "prettier": "^3.6.2",
         "prompts": "^2.4.2",
       },
       "devDependencies": {
@@ -37,6 +38,8 @@
     "osu-buffer": ["osu-buffer@2.0.2", "", {}, "sha512-1CuMcb8NUoNlQLSZwYrMuNgc3/2IdJ/6YxzO3sEN0TWrDAzK4u3kXCa4rgjnCXF3uRCxXeBysMLzRfd9VLwYFw=="],
 
     "osu-db-parser": ["osu-db-parser@2.0.1", "", { "dependencies": { "osu-buffer": "^2.0.2" } }, "sha512-90Ro6Huu9II4ZfYxaWzCrJ0mjo0bpBDs5ChpyZuUf/5h3Jvvoh4lagz8HYVUt+QAVGk8jHt/LMPiIAAAX6NYtw=="],
+
+    "prettier": ["prettier@3.6.2", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ=="],
 
     "prompts": ["prompts@2.4.2", "", { "dependencies": { "kleur": "^3.0.3", "sisteransi": "^1.0.5" } }, "sha512-NxNv/kLguCA7p3jE8oL2aEBsrJWgAakBpgmgK6lpPWV+WuOmY6r2/zbAVnP+T8bQlA0nzHXSJSJW0Hq7ylaD2Q=="],
 

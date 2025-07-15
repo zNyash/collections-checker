@@ -19,7 +19,7 @@ export class OsuDatabaseParser {
         const collectionsBuffer = Buffer.from(await Bun.file(collectionPath).arrayBuffer());
         const collectionData = new OsuDBParser(null, collectionsBuffer).getCollectionData();
 
-        return new ParsedCollections(collectionData)
+        return new ParsedCollections(collectionData);
     }
 
     /**

@@ -5,7 +5,7 @@ export interface IParsedCollections {
     toJson: () => string;
     toBlob: () => Blob;
     toBytes: () => Uint8Array;
-};
+}
 
 export class ParsedCollections implements IParsedCollections {
     constructor(public data: Collections) {}
