@@ -8,12 +8,23 @@ export interface IConfigData {
     tokenExpiration?: number;
 }
 export class Config {
+    private static instance: Config;
+
     private config: IConfigData = {
         clientID: "",
         clientSecret: "",
         token: "",
         tokenExpiration: 0,
     };
+
+    private constructor() {}
+
+    public static getInstance(): Config {
+        if (!Config.instance) {
+            Config.instance = new Config();
+        }
+        return Config.instance;
+    }
 
     /**
      * Checks if the config.cfg file exists.

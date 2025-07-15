@@ -16,7 +16,7 @@ async function main() {
     const collectionParser = new OsuDatabaseParser(osuPath);
     const collectionData = await collectionParser.parseCollectionDb();
 
-    const config = await new Config().getConfig();
+    const config = await Config.getInstance().getConfig();
     // await Bun.write("collection-db.json", collectionData.toJson()); // Save collection data to a JSON file
 
     displayCollectionsInfo(collectionData);
