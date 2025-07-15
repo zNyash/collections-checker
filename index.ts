@@ -4,6 +4,7 @@ import { OsuDatabaseParser } from "./classes/OsuDatabaseParser";
 import chalk from "chalk";
 import prompts from "prompts";
 import { Config } from "./classes/Config";
+import { displayCollectionsInfo } from "./utils/displayCollectionsInfo";
 
 class OsuApi {
     // TODO: Add osu! api
@@ -18,24 +19,12 @@ async function main() {
     const collectionParser = new OsuDatabaseParser(osuPath);
     const collectionData = await collectionParser.parseCollectionDb();
 
-    const config = new Config().getConfig();
+    const config = await new Config().getConfig();
     // await Bun.write("collection-db.json", collectionData.toJson()); // Save collection data to a JSON file
 
-    let totalBeatmaps: number = 0;
-    let MD5Hashes: string[] = [];
+    displayCollectionsInfo(collectionData);
 
-    console.log(chalk.grey("=".repeat(50)));
-    console.log("");
-    collectionData.data.collection.forEach((collection) => {
-        console.log(chalk.yellow(`Collection: ${collection.name}`));
-        console.log(chalk.yellow(`Beatmaps: ${collection.beatmapsCount}`));
-        console.log("");
-        totalBeatmaps += collection.beatmapsCount;
-        MD5Hashes.push(...collection.beatmapsMd5);
-    });
-    console.log(chalk.grey("=".repeat(50)));
-    console.log(chalk.green(`Total Beatmaps: ${totalBeatmaps}`));
-
+    let downloadEverything = false;
     const response = await prompts({
         type: "text",
         name: "download",
@@ -43,9 +32,11 @@ async function main() {
         validate: (value) => {
             switch (value.toLowerCase().trim()) {
                 case "":
+                    downloadEverything = true;
                     return true;
                 case "y":
                 case "yes":
+                    downloadEverything = true;
                     return true;
                 case "n":
                 case "no":
@@ -55,6 +46,8 @@ async function main() {
             }
         },
     });
+
+    if (!downloadEverything) return;
 }
 
 main();
