@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "chalk": "^5.4.1",
+    "osu-db-parser": "^2.0.1",
     "prompts": "^2.4.2"
   }
 }

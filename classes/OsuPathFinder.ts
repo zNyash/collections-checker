@@ -13,7 +13,7 @@ export class OsuPathFinder {
   /**
    * Checks if a directory is a valid osu! installation
    * @param path Directory path to check
-   * @returns true if the directory is a valid osu! installation, false otherwise
+   * @returns `True` if the directory is a valid osu! installation, false otherwise
    */
   private async isValidPath(path: string): Promise<boolean> {
     const pathCollectionDb = join(path, "collection.db");
