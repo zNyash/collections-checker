@@ -34,4 +34,5 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 .DS_Store
 
 # Misc
-collection-db.json
+collection-downloader.exe
+config.cfg
