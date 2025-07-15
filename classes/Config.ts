@@ -2,13 +2,13 @@ import chalk from "chalk";
 import prompts from "prompts";
 
 interface IConfigData {
-    apiKey: string;
-    apiSecret: string;
+    clientID: string;
+    clientSecret: string;
 }
 export class Config {
     private config: IConfigData = {
-        apiKey: "",
-        apiSecret: "",
+        clientID: "",
+        clientSecret: "",
     };
 
     /**
@@ -37,12 +37,12 @@ export class Config {
 
         await Bun.write(
             "config.cfg",
-            `DON'T SHARE THIS FILE\napiKey=${response.Client_ID}\napiSecret=${response.Client_Secret}`,
+            `DON'T SHARE THIS FILE\nclientID=${response.Client_ID}\nclientSecret=${response.Client_Secret}`,
         );
 
         this.config = {
-            apiKey: response.Client_ID,
-            apiSecret: response.Client_Secret,
+            clientID: response.Client_ID,
+            clientSecret: response.Client_Secret,
         };
 
         return;
@@ -85,12 +85,31 @@ export class Config {
         return response;
     }
 
-    public getConfig(): IConfigData {
-        const configExist = this.checkIfConfigExists();
+    /**
+     * Reads the `config.cfg` file and updates the configuration object.
+     */
+    private async readConfig() {
+        const config = await Bun.file("config.cfg").text();
+        const lines = config.split("\n");
+        const id = lines[1]?.split("=")[1] ?? "";
+        const secret = lines[2]?.split("=")[1] ?? "";
+        this.config = {
+            clientID: id,
+            clientSecret: secret,
+        };
+    }
+
+    public async getConfig(): Promise<IConfigData> {
+        const configExist = await this.checkIfConfigExists();
         if (!configExist) {
-            this.createConfig();
+            await this.createConfig();
+            console.log(chalk.green("config created & loaded"));
+            return this.config;
         }
 
+        await this.readConfig();
+
+        console.log(chalk.green("config loaded"));
         return this.config;
     }
 }
