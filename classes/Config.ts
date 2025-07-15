@@ -1,14 +1,18 @@
 import chalk from "chalk";
 import prompts from "prompts";
 
-interface IConfigData {
+export interface IConfigData {
     clientID: string;
     clientSecret: string;
+    token?: string;
+    tokenExpiration?: number;
 }
 export class Config {
     private config: IConfigData = {
         clientID: "",
         clientSecret: "",
+        token: "",
+        tokenExpiration: 0,
     };
 
     /**
@@ -35,15 +39,12 @@ export class Config {
 
         const response = await this.askUserForInfo();
 
-        await Bun.write(
-            "config.cfg",
-            `DON'T SHARE THIS FILE\nclientID=${response.Client_ID}\nclientSecret=${response.Client_Secret}`,
-        );
-
         this.config = {
             clientID: response.Client_ID,
             clientSecret: response.Client_Secret,
         };
+
+        await Bun.write("config.cfg", JSON.stringify(this.config, null, 2));
 
         return;
     }
@@ -89,13 +90,10 @@ export class Config {
      * Reads the `config.cfg` file and updates the configuration object.
      */
     private async readConfig() {
-        const config = await Bun.file("config.cfg").text();
-        const lines = config.split("\n");
-        const id = lines[1]?.split("=")[1] ?? "";
-        const secret = lines[2]?.split("=")[1] ?? "";
+        const config = await Bun.file("config.cfg").json();
         this.config = {
-            clientID: id,
-            clientSecret: secret,
+            clientID: config.clientID,
+            clientSecret: config.clientSecret,
         };
     }
 
@@ -111,5 +109,11 @@ export class Config {
 
         console.log(chalk.green("config loaded"));
         return this.config;
+    }
+
+    public async updateToken(token: string, expiration: number) {
+        this.config.token = token;
+        this.config.tokenExpiration = expiration;
+        await Bun.write("config.cfg", JSON.stringify(this.config, null, 2));
     }
 }
