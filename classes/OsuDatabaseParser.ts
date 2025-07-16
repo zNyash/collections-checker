@@ -1,6 +1,6 @@
 import { OsuDBParser } from "osu-db-parser";
 import { join } from "path";
-import { type IParsedCollections, ParsedCollections } from "./ParsedCollections";
+import type { Collections } from "../types/Collections";
 
 export class OsuDatabaseParser {
     private osuPath: string;
@@ -13,13 +13,13 @@ export class OsuDatabaseParser {
      * Parses the `collection.db` file and returns its contents as a stringified JSON object.
      * @returns a stringified JSON object representing the collection.db file
      */
-    public async parseCollectionDb(): Promise<IParsedCollections> {
+    public async parseCollectionDb(): Promise<Collections> {
         const collectionPath = join(this.osuPath, "collection.db");
 
         const collectionsBuffer = Buffer.from(await Bun.file(collectionPath).arrayBuffer());
         const collectionData = new OsuDBParser(null, collectionsBuffer).getCollectionData();
 
-        return new ParsedCollections(collectionData);
+        return collectionData;
     }
 
     /**

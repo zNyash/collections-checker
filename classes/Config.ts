@@ -4,8 +4,8 @@ import prompts from "prompts";
 export interface IConfigData {
     clientID: string;
     clientSecret: string;
-    token?: string;
-    tokenExpiration?: number;
+    token: string;
+    tokenExpiration: number;
 }
 export class Config {
     private static instance: Config;
@@ -31,7 +31,6 @@ export class Config {
      * @returns A boolean indicating whether the file exists or not.
      */
     private async checkIfConfigExists() {
-        console.log(chalk.grey("Checking if config.cfg exists..."));
         return await Bun.file("config.cfg").exists();
     }
 
@@ -53,9 +52,11 @@ export class Config {
         this.config = {
             clientID: response.Client_ID,
             clientSecret: response.Client_Secret,
+            token: this.config.token,
+            tokenExpiration: this.config.tokenExpiration,
         };
 
-        await Bun.write("config.cfg", JSON.stringify(this.config, null, 2));
+        await this.writeConfig();
 
         return;
     }
@@ -101,30 +102,39 @@ export class Config {
      * Reads the `config.cfg` file and updates the configuration object.
      */
     private async readConfig() {
+        console.log(chalk.grey("Reading config..."));
         const config = await Bun.file("config.cfg").json();
         this.config = {
             clientID: config.clientID,
             clientSecret: config.clientSecret,
+            token: config.token,
+            tokenExpiration: config.tokenExpiration,
         };
     }
 
     public async getConfig(): Promise<IConfigData> {
         const configExist = await this.checkIfConfigExists();
+
         if (!configExist) {
             await this.createConfig();
-            console.log(chalk.green("config created & loaded"));
+            console.log(chalk.green("Config created & loaded."));
             return this.config;
         }
 
         await this.readConfig();
 
-        console.log(chalk.green("config loaded"));
         return this.config;
     }
 
     public async updateToken(token: string, expiration: number) {
+        const expiratesAt = Date.now() + expiration * 1000;
+
         this.config.token = token;
-        this.config.tokenExpiration = expiration;
+        this.config.tokenExpiration = expiratesAt;
+        await this.writeConfig();
+    }
+
+    private async writeConfig() {
         await Bun.write("config.cfg", JSON.stringify(this.config, null, 2));
     }
 }
