@@ -18,15 +18,10 @@ export async function collectBeatmapIds(collections: Collections, config: IConfi
     }
 
     const beatmapIDs = new Set<number>();
-    const RATE_LIMIT = 1150;
     let requests = 0;
 
     for (const hash of uniqueHashes) {
-        if (requests >= RATE_LIMIT) {
-            console.log(chalk.yellow("Rate limit reached. Waiting 60 seconds..."));
-            await Bun.sleep(60000);
-            requests = 0;
-        }
+        await Bun.sleep(60);
 
         const beatmap = await new OsuApi(config).lookupBeatmap(hash, "checksum");
         if (!beatmap) continue;
@@ -35,5 +30,8 @@ export async function collectBeatmapIds(collections: Collections, config: IConfi
         beatmapIDs.add(beatmap.beatmapset_id);
     }
 
-    return Array.from(beatmapIDs);
+    return {
+        beatmapIDs: Array.from(beatmapIDs),
+        requests,
+    };
 }
