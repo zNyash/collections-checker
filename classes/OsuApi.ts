@@ -63,24 +63,25 @@ export class OsuApi {
     public async lookupBeatmap(
         parameter: string,
         MODE: "checksum" | "filename" | "id" = "checksum",
-    ): Promise<BeatmapExtended> {
+    ): Promise<BeatmapExtended | null> {
         await this.validateToken();
 
         console.log(chalk.grey(`Looking for beatmap with ${MODE}: ${parameter}`));
-        const response = await fetch(`${this.API_URL}beatmaps/lookup?${MODE}=${parameter}`, {
-            method: "GET",
-            headers: {
-                Accept: "application/json",
-                Authorization: `Bearer ${this.accessToken}`,
-            },
-        });
+        try {
+            const response = await fetch(`${this.API_URL}beatmaps/lookup?${MODE}=${parameter}`, {
+                method: "GET",
+                headers: {
+                    Accept: "application/json",
+                    Authorization: `Bearer ${this.accessToken}`,
+                },
+            });
 
-        if (!response.ok) {
-            throw new Error(chalk.red(`Failed to get beatmap.`));
+            const data = (await response.json()) as BeatmapExtended;
+
+            return data;
+        } catch {
+            console.log(chalk.red(`Failed to get beatmap with ${MODE}: ${parameter}.`));
+            return null;
         }
-
-        const data = (await response.json()) as BeatmapExtended;
-
-        return data;
     }
 }

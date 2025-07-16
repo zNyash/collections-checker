@@ -2,11 +2,12 @@
 import { OsuPathFinder } from "./classes/OsuPathFinder";
 import { OsuDatabaseParser } from "./classes/OsuDatabaseParser";
 import { Config } from "./classes/Config";
+import { OsuApi } from "./classes/OsuApi";
 
 // Utility functions
 import { displayCollectionsInfo } from "./utils/displayCollectionsInfo";
 import { shouldDownloadBeatmaps } from "./utils/shouldDownloadBeatmaps";
-import { OsuApi } from "./classes/OsuApi";
+import { collectBeatmapIds } from "./utils/collectBeatmapIds";
 
 async function main() {
     // Find osu! installation path
@@ -24,18 +25,7 @@ async function main() {
     const downloadEverything = await shouldDownloadBeatmaps();
     if (!downloadEverything) return;
 
-    let beatmapsIds = [];
-    // for (const collection of collections.collection) {
-    //     for (const hash of collection.beatmapsMd5) {
-    //         const beatmap = await new OsuApi(config).lookupBeatmap(hash, "checksum");
-    //         beatmap.beatmapset_id
-    //     }
-    // }
-    const response = await new OsuApi(config).lookupBeatmap(
-        "fbd1aa9f5cf579c82a9ee7150f5868da",
-        "checksum",
-    );
-    await Bun.write("beatmap.json", JSON.stringify(response, null, 2));
+    const beatmapIDs = await collectBeatmapIds(collections, config);
 }
 
 main();
