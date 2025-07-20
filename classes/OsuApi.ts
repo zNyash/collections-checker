@@ -91,8 +91,16 @@ export class OsuApi {
 
         console.log(chalk.grey(`Downloading beatmap with ID: ${beatmapID}`));
         try {
-            const url = `https://osu.ppy.sh/beatmapsets/${beatmapID}/download?noVideo=1`;
-            const response = await fetch(url, { redirect: "follow" });
+            const url = `${this.API_URL}/beatmapsets/${beatmapID}/download`;
+
+            const response = await fetch(url, {
+                redirect: "follow",
+                headers: {
+                    Authorization: `Bearer ${this.accessToken}`,
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+            });
 
             const buffer = Buffer.from(await response.arrayBuffer());
             return buffer;
@@ -100,5 +108,27 @@ export class OsuApi {
             console.log(chalk.red(`Failed to download beatmapset with ID: ${beatmapID}: ${error}`));
             return null;
         }
+    }
+
+    public async login() {
+        const res = fetch("https://osu.ppy.sh/session", {
+            headers: {
+                accept: "*/*;q=0.5, text/javascript, application/javascript, application/ecmascript, application/x-ecmascript",
+                "accept-language": "en-US,en;q=0.9",
+                "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                priority: "u=1, i",
+                "sec-ch-ua": '"Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"',
+                "sec-ch-ua-mobile": "?0",
+                "sec-ch-ua-platform": '"Windows"',
+                "sec-fetch-dest": "empty",
+                "sec-fetch-mode": "cors",
+                "sec-fetch-site": "same-origin",
+                "x-requested-with": "XMLHttpRequest",
+                Referer: "https://osu.ppy.sh/users/12976255",
+            },
+            body: "_token=&username=Nyash&password=OS*M8BN4sh*&cf-turnstile-response=0.aT9Lm6jaaegcfcSQ-zY65IOU7aGLJpGyZBjNdF0A2UvGVsasw2h_pOR9zyU-kEgcWvEmn60nTOBIO8YsROObxXKPXu8r405cTKb979xIbFuj6R0hIyItZw84Tnf5SPGt-BqjCZkoMRhDrz8f6l3wCK8t7_L94nps6OmpWMfBPXoLjoVt0lrt58Y9YIzUN-Zjy9yPyjuAaPLlHRMyKarhthkQ0Ps6M5KQ9PuspP0XGX0wyEZmnDAIcCcwqXDEnwj-Woz1uVVtavwsDFIvyyOfVf1c-5Q8EXpw05YHMfmCiKLHoODugvoiBtodUCy0xx6eH0J_WYAgRX5zt0SOW6WDq9vE2KlOfSCTQetJ3Pz6Lg5lqS2ThzQfvh7eJHkNF9VmtEIiRqe41NMAUNavtoaVj_7mkO8ab_9raAo2DXAAse03TF843JjwLw9NI4P3RgHuoVFmk-JVQKHXb6ig66Hct23dnh6mVjzy9dDS5HivvciNZao8zM68KM2R8hQys35dCV87xviYlYyRgepqp27_l9hd4RkmsY12ablZiB6LFBtXGpwd7GWSUkfbNHe1iUAzxJnSonZWohRmd656W8ULcU_TR63FkGdHFh999IqyybCcIFWfSVyO5JgON-JIxJY3Zv0lx28KQB8dgo_z-dkcyU8KbG5RdyTeC6muveNEbglYdxIJAJN0WEEt5o51WIKNSh8LhNKbVRoiXFVvv_d_OBTPL0J4QDIAbbYfSAIG1qnA32n1lqs4K1vvkAuiljUeVItgbsSzZV3acae2frzrKD1UzGiUkR0Z_igRIvi6flSswTN7GtTarlTHU0GTGWe7bVMWWCtxOe92fmcH0Mt0a1wk5KPXtbsIoVGls6R6mhSJ8q7T1p4rNNhEBmenUQjwNIvawXMfcO8K2zkpDSoskQ.fj2xIgetTmPo-qH8D2bZ1w.f85c3bb4defd66b9631ce4acb19f41249f9ed9132e5e6e996603f9af1bcdaf80",
+            method: "POST",
+        });
+        console.log(res)
     }
 }

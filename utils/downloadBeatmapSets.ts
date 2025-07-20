@@ -11,7 +11,7 @@ export async function downloadBeatmapSets(beatmapIDs: number[], config: IConfigD
     for (const id of beatmapIDs) {
         const beatmapBlob = await osuApi.downloadBeatmapSet(id);
         if (!existsSync(downloadDir)) mkdirSync(downloadDir);
-        Bun.write(`${downloadDir}/beatmapset.zip`, beatmapBlob!);
+        Bun.write(`${downloadDir}/${id}.osz`, beatmapBlob!);
         Bun.sleep(60);
     }
     console.log(chalk.green("All beatmap sets downloaded."));

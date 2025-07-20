@@ -1,0 +1,112 @@
+{
+    "beatmapset_id": 1633256,
+    "difficulty_rating": 5.28,
+    "id": 3356294,
+    "mode": "osu",
+    "status": "ranked",
+    "total_length": 119,
+    "user_id": 11655886,
+    "version": "Basen's Expert",
+    "accuracy": 8.6,
+    "ar": 9.2,
+    "bpm": 119.5,
+    "convert": false,
+    "count_circles": 177,
+    "count_sliders": 283,
+    "count_spinners": 1,
+    "cs": 4.3,
+    "deleted_at": null,
+    "drain": 5.2,
+    "hit_length": 119,
+    "is_scoreable": true,
+    "last_updated": "2022-01-23T05:20:48Z",
+    "mode_int": 0,
+    "passcount": 4784,
+    "playcount": 31978,
+    "ranked": 1,
+    "url": "https://osu.ppy.sh/beatmaps/3356294",
+    "checksum": "fbd1aa9f5cf579c82a9ee7150f5868da",
+    "beatmapset": {
+        "artist": "THE ORAL CIGARETTES",
+        "artist_unicode": "THE ORAL CIGARETTES",
+        "covers": {
+            "cover": "https://assets.ppy.sh/beatmaps/1633256/covers/cover.jpg?1642915266",
+            "cover@2x": "https://assets.ppy.sh/beatmaps/1633256/covers/cover@2x.jpg?1642915266",
+            "card": "https://assets.ppy.sh/beatmaps/1633256/covers/card.jpg?1642915266",
+            "card@2x": "https://assets.ppy.sh/beatmaps/1633256/covers/card@2x.jpg?1642915266",
+            "list": "https://assets.ppy.sh/beatmaps/1633256/covers/list.jpg?1642915266",
+            "list@2x": "https://assets.ppy.sh/beatmaps/1633256/covers/list@2x.jpg?1642915266",
+            "slimcover": "https://assets.ppy.sh/beatmaps/1633256/covers/slimcover.jpg?1642915266",
+            "slimcover@2x": "https://assets.ppy.sh/beatmaps/1633256/covers/slimcover@2x.jpg?1642915266"
+        },
+        "creator": "Smoke",
+        "favourite_count": 238,
+        "genre_id": 4,
+        "hype": null,
+        "id": 1633256,
+        "language_id": 3,
+        "nsfw": false,
+        "offset": 0,
+        "play_count": 223800,
+        "preview_url": "//b.ppy.sh/preview/1633256.mp3",
+        "source": "",
+        "spotlight": false,
+        "status": "ranked",
+        "title": "Fantasy (Cut Ver.)",
+        "title_unicode": "Fantasy (Cut Ver.)",
+        "track_id": null,
+        "user_id": 10726630,
+        "video": false,
+        "bpm": 119.5,
+        "can_be_hyped": false,
+        "deleted_at": null,
+        "discussion_enabled": true,
+        "discussion_locked": false,
+        "is_scoreable": true,
+        "last_updated": "2022-01-23T05:20:45Z",
+        "legacy_thread_url": "https://osu.ppy.sh/community/forums/topics/1467277",
+        "nominations_summary": {
+            "current": 2,
+            "eligible_main_rulesets": ["osu"],
+            "required_meta": {
+                "main_ruleset": 2,
+                "non_main_ruleset": 1
+            }
+        },
+        "ranked": 1,
+        "ranked_date": "2022-02-02T08:42:14Z",
+        "rating": 9.03745,
+        "storyboard": false,
+        "submitted_date": "2021-11-21T22:02:57Z",
+        "tags": "rock jrock j-rock japanese short ver version basensorex suck my world",
+        "availability": {
+            "download_disabled": false,
+            "more_information": null
+        },
+        "ratings": [0, 15, 1, 3, 0, 4, 1, 1, 17, 32, 193]
+    },
+    "current_user_playcount": 0,
+    "failtimes": {
+        "fail": [
+            0, 0, 0, 0, 0, 0, 0, 0, 9, 36, 0, 36, 270, 918, 1098, 927, 1620, 504, 252, 162, 369,
+            549, 126, 621, 117, 99, 9, 0, 9, 9, 9, 0, 0, 0, 9, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 18, 0, 9, 0, 0, 0, 9, 0, 0, 0, 0, 0, 9, 63, 306, 243, 243, 27, 27, 126, 162, 99, 126,
+            36, 27, 9, 81, 108, 18, 162, 18, 45, 18, 72, 189, 126, 126, 63, 18, 27, 0, 0, 27, 0, 0,
+            36, 0, 0, 0, 27, 0, 45
+        ],
+        "exit": [
+            0, 0, 0, 0, 0, 0, 72, 252, 369, 153, 324, 81, 423, 1134, 1161, 1638, 774, 873, 189, 252,
+            882, 621, 378, 468, 270, 351, 162, 90, 99, 99, 36, 45, 27, 162, 99, 126, 27, 99, 90, 63,
+            81, 81, 27, 27, 27, 54, 27, 27, 18, 36, 36, 9, 9, 9, 18, 27, 9, 9, 27, 18, 63, 171, 216,
+            72, 144, 27, 45, 45, 234, 162, 72, 108, 81, 54, 72, 27, 18, 90, 54, 9, 0, 9, 63, 36, 72,
+            18, 72, 72, 36, 72, 54, 9, 18, 18, 36, 0, 18, 27, 18, 153
+        ]
+    },
+    "max_combo": 752,
+    "owners": [
+        {
+            "id": 11655886,
+            "username": "Basensorex"
+        }
+    ]
+}

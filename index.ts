@@ -13,13 +13,9 @@ import { collectBeatmapIds } from "./utils/collectBeatmapIds";
 import { downloadBeatmapSets } from "./utils/downloadBeatmapSets";
 
 async function main() {
-    // Find osu! installation path
-    const osuPathFinder = new OsuPathFinder();
-    const osuPath = await osuPathFinder.getOsuPath();
+    const osuPath = await new OsuPathFinder().getOsuPath();
 
-    // Parse osu! collection.db file
-    const collectionParser = new OsuDatabaseParser(osuPath);
-    const collections = await collectionParser.parseCollectionDb();
+    const collections = await new OsuDatabaseParser(osuPath).parseCollectionDb();
 
     const config = await Config.getInstance().getConfig();
     // await Bun.write("collection-db.json", JSON.stringify(collections, null, 2)); // Save collection data to a JSON file
@@ -27,8 +23,9 @@ async function main() {
     displayCollectionsInfo(collections);
     if (!(await shouldDownloadBeatmaps())) return;
 
-    const { beatmapIDs } = await collectBeatmapIds(collections, config);
-    downloadBeatmapSets(beatmapIDs, config);
+    // const { beatmapIDs } = await collectBeatmapIds(collections, config);
+    downloadBeatmapSets([2071283], config);
 }
 
 main();
+
