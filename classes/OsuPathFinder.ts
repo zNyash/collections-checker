@@ -1,5 +1,4 @@
 import prompts from "prompts";
-import chalk from "chalk";
 import { join } from "path";
 import { homedir } from "os";
 import { Logger } from "./Logger";

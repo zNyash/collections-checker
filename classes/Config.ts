@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import prompts from "prompts";
 import { Logger } from "./Logger";
 

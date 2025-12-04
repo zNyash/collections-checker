@@ -1,6 +1,4 @@
-import chalk from "chalk";
 import type { IConfigData } from "../classes/Config";
-import { OsuApi } from "../classes/OsuApi";
 import { existsSync, mkdirSync } from "fs";
 import { Logger } from "../classes/Logger";
 import type { RateLimitResponse } from "../types/RateLimit";
