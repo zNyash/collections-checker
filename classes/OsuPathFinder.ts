@@ -3,6 +3,10 @@ import chalk from "chalk";
 import { join } from "path";
 import { homedir } from "os";
 import { Logger } from "./Logger";
+import { Config } from "./Config";
+
+const logger = Logger.getInstance();
+const config = Config.getInstance();
 
 export class OsuPathFinder {
     private readonly defaultPaths = [
@@ -30,6 +34,18 @@ export class OsuPathFinder {
      * @returns the path to the osu! installation if found, empty string otherwise
      */
     private async findOsuPath(): Promise<string> {
+        const cfg = await config.getConfig();
+
+        // First Checking - Saved Path from Config
+        if (cfg.osuPath) {
+            logger.info(`Checking osu! path from config: ${cfg.osuPath}`);
+            if (await this.isValidPath(cfg.osuPath)) {
+                logger.success(`Found osu! installation at: ${cfg.osuPath}`);
+                return cfg.osuPath;
+            }
+        }
+
+        // Second Checking - Default Paths
         for (const path of this.defaultPaths) {
             logger.info(`Checking default path: ${path}`);
 
@@ -80,10 +96,10 @@ export class OsuPathFinder {
 
         if (!osuPath) {
             osuPath = await this.askForCustomPath();
+            await config.updateOsuPath(osuPath);
+            logger.success(`osu! installation path set to: ${osuPath}`);
         }
 
         return osuPath;
     }
 }
-
-const logger = Logger.getInstance();

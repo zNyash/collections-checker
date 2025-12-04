@@ -143,4 +143,9 @@ export class Config {
     private async writeConfig() {
         await Bun.write("config.cfg", JSON.stringify(this.config, null, 2));
     }
+
+    public async updateOsuPath(path: string) {
+        this.config.osuPath = path;
+        await this.writeConfig();
+    }
 }
