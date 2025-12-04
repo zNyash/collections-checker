@@ -2,6 +2,7 @@ import prompts from "prompts";
 import chalk from "chalk";
 import { join } from "path";
 import { homedir } from "os";
+import { Logger } from "./Logger";
 
 export class OsuPathFinder {
     private readonly defaultPaths = [
@@ -30,16 +31,16 @@ export class OsuPathFinder {
      */
     private async findOsuPath(): Promise<string> {
         for (const path of this.defaultPaths) {
-            console.log(chalk.gray(`Checking: ${path}`));
+            logger.info(`Checking default path: ${path}`);
 
             if (await this.isValidPath(path)) {
-                console.log(chalk.green(`osu! installation was found.`));
+                logger.success(`Found osu! installation at: ${path}`);
                 return path;
             }
         }
 
-        console.log(chalk.red("osu! installation not found in default paths."));
-        console.log(chalk.yellow("Please enter the path to the osu! installation manually."));
+        logger.info("osu! installation not found in default paths.");
+        logger.warn("Please enter the path to the osu! installation manually.");
         return "";
     }
 
@@ -73,7 +74,7 @@ export class OsuPathFinder {
      * @returns the path to the osu! installation if it could be found, empty string otherwise
      */
     public async getOsuPath() {
-        console.log(chalk.blue("Attempting to find osu! installation..."));
+        logger.info("Attempting to find osu! installation...");
 
         let osuPath = await this.findOsuPath();
 
@@ -84,3 +85,5 @@ export class OsuPathFinder {
         return osuPath;
     }
 }
+
+const logger = Logger.getInstance();
