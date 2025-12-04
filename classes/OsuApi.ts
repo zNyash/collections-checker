@@ -17,11 +17,13 @@ export class OsuApi {
     private clientSecret: string = "";
     private accessToken: string = "";
     private API_URL = "https://osu.ppy.sh/api/v2";
+    private expiresIn: number = 0;
 
     constructor(config: IConfigData) {
         this.clientID = config.clientID;
         this.clientSecret = config.clientSecret;
         this.accessToken = config.token;
+        this.expiresIn = config.tokenExpiration;
     }
 
     private async getAccessToken() {
@@ -47,14 +49,14 @@ export class OsuApi {
         logger.success("Token obtained.");
         const data = (await response.json()) as ITokenResponse;
 
-        await Config.getInstance().updateToken(data.access_token, data.expires_in);
+        this.expiresIn = await Config.getInstance().updateToken(data.access_token, data.expires_in);
         this.accessToken = data.access_token;
 
         return data;
     }
 
     private async validateToken() {
-        if (config.tokenExpiration < Date.now()) {
+        if (this.expiresIn < Date.now()) {
             logger.warn("Token expired");
             await this.getAccessToken();
             return;

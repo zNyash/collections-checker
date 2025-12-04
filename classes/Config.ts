@@ -137,6 +137,7 @@ export class Config {
         this.config.token = token;
         this.config.tokenExpiration = expiratesAt;
         await this.writeConfig();
+        return expiratesAt;
     }
 
     private async writeConfig() {
