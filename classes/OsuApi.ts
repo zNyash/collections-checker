@@ -1,12 +1,17 @@
 import chalk from "chalk";
 import { Config, type IConfigData } from "./Config";
 import type { BeatmapExtended } from "../types/BeatmapExtended";
+import { Logger } from "./Logger";
 
 interface ITokenResponse {
     access_token: string;
     expires_in: number;
     token_type: string;
 }
+
+const config = await Config.getInstance().getConfig();
+
+const logger = Logger.getInstance();
 export class OsuApi {
     private clientID: string = "";
     private clientSecret: string = "";
@@ -20,7 +25,7 @@ export class OsuApi {
     }
 
     private async getAccessToken() {
-        console.log(chalk.grey("Getting new token..."));
+        logger.info("Getting new token");
         const response = await fetch("https://osu.ppy.sh/oauth/token", {
             method: "POST",
             headers: {
@@ -39,7 +44,7 @@ export class OsuApi {
             throw new Error(chalk.red("Failed to get access token. Check your config file."));
         }
 
-        console.log(chalk.green("Token obtained."));
+        logger.success("Token obtained.");
         const data = (await response.json()) as ITokenResponse;
 
         await Config.getInstance().updateToken(data.access_token, data.expires_in);
@@ -49,10 +54,8 @@ export class OsuApi {
     }
 
     private async validateToken() {
-        const config = await Config.getInstance().getConfig();
-
         if (config.tokenExpiration < Date.now()) {
-            console.log(chalk.red("Token expired."));
+            logger.warn("Token expired");
             await this.getAccessToken();
             return;
         }
@@ -66,7 +69,7 @@ export class OsuApi {
     ): Promise<BeatmapExtended | null> {
         await this.validateToken();
 
-        console.log(chalk.grey(`Looking for beatmap with ${MODE}: ${parameter}`));
+        logger.info(`Looking for beatmap with ${MODE}: ${parameter}`);
         try {
             const url = `${this.API_URL}/beatmaps/lookup?${MODE}=${parameter}`;
             const response = await fetch(url, {
@@ -81,7 +84,7 @@ export class OsuApi {
 
             return data;
         } catch {
-            console.log(chalk.red(`Failed to get beatmap with ${MODE}: ${parameter}.`));
+            logger.error(`Failed to get beatmap with ${MODE}: ${parameter}.`);
             return null;
         }
     }
@@ -89,7 +92,7 @@ export class OsuApi {
     public async downloadBeatmapSet(beatmapID: number): Promise<Buffer | null> {
         await this.validateToken();
 
-        console.log(chalk.grey(`Downloading beatmap with ID: ${beatmapID}`));
+        logger.info(`Downloading beatmapset with ID: ${beatmapID}`);
         try {
             const url = `${this.API_URL}/beatmapsets/${beatmapID}/download`;
 
@@ -105,7 +108,7 @@ export class OsuApi {
             const buffer = Buffer.from(await response.arrayBuffer());
             return buffer;
         } catch (error) {
-            console.log(chalk.red(`Failed to download beatmapset with ID: ${beatmapID}: ${error}`));
+            logger.warn(`Failed to download beatmapset with ID: ${beatmapID}. Error: ${error}`);
             return null;
         }
     }
@@ -129,6 +132,6 @@ export class OsuApi {
             body: "_token=&username=Nyash&password=OS*M8BN4sh*&cf-turnstile-response=0.aT9Lm6jaaegcfcSQ-zY65IOU7aGLJpGyZBjNdF0A2UvGVsasw2h_pOR9zyU-kEgcWvEmn60nTOBIO8YsROObxXKPXu8r405cTKb979xIbFuj6R0hIyItZw84Tnf5SPGt-BqjCZkoMRhDrz8f6l3wCK8t7_L94nps6OmpWMfBPXoLjoVt0lrt58Y9YIzUN-Zjy9yPyjuAaPLlHRMyKarhthkQ0Ps6M5KQ9PuspP0XGX0wyEZmnDAIcCcwqXDEnwj-Woz1uVVtavwsDFIvyyOfVf1c-5Q8EXpw05YHMfmCiKLHoODugvoiBtodUCy0xx6eH0J_WYAgRX5zt0SOW6WDq9vE2KlOfSCTQetJ3Pz6Lg5lqS2ThzQfvh7eJHkNF9VmtEIiRqe41NMAUNavtoaVj_7mkO8ab_9raAo2DXAAse03TF843JjwLw9NI4P3RgHuoVFmk-JVQKHXb6ig66Hct23dnh6mVjzy9dDS5HivvciNZao8zM68KM2R8hQys35dCV87xviYlYyRgepqp27_l9hd4RkmsY12ablZiB6LFBtXGpwd7GWSUkfbNHe1iUAzxJnSonZWohRmd656W8ULcU_TR63FkGdHFh999IqyybCcIFWfSVyO5JgON-JIxJY3Zv0lx28KQB8dgo_z-dkcyU8KbG5RdyTeC6muveNEbglYdxIJAJN0WEEt5o51WIKNSh8LhNKbVRoiXFVvv_d_OBTPL0J4QDIAbbYfSAIG1qnA32n1lqs4K1vvkAuiljUeVItgbsSzZV3acae2frzrKD1UzGiUkR0Z_igRIvi6flSswTN7GtTarlTHU0GTGWe7bVMWWCtxOe92fmcH0Mt0a1wk5KPXtbsIoVGls6R6mhSJ8q7T1p4rNNhEBmenUQjwNIvawXMfcO8K2zkpDSoskQ.fj2xIgetTmPo-qH8D2bZ1w.f85c3bb4defd66b9631ce4acb19f41249f9ed9132e5e6e996603f9af1bcdaf80",
             method: "POST",
         });
-        console.log(res)
+        console.log(res);
     }
 }
