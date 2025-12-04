@@ -35,6 +35,6 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 .DS_Store
 
 # Misc
-collection-downloader.exe
+collection-checker.exe
 config.cfg
 .vscode
