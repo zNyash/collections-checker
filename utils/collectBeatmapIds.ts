@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import type { IConfigData } from "../classes/Config";
 import type { Collections } from "../types/Collections";
 import { OsuApi } from "../classes/OsuApi";
@@ -10,12 +9,9 @@ import { OsuApi } from "../classes/OsuApi";
  * @returns An array of beatmap IDs
  */
 export async function collectBeatmapIds(collections: Collections, config: IConfigData) {
-    const uniqueHashes = new Set<string>();
-    for (const col of collections.collection) {
-        for (const hash of col.beatmapsMd5) {
-            uniqueHashes.add(hash);
-        }
-    }
+    const api = new OsuApi(config);
+
+    const uniqueHashes = extractUniqueHashes(collections);
 
     const beatmapIDs = new Set<number>();
     let requests = 0;
@@ -23,15 +19,30 @@ export async function collectBeatmapIds(collections: Collections, config: IConfi
     for (const hash of uniqueHashes) {
         await Bun.sleep(60);
 
-        const beatmap = await new OsuApi(config).lookupBeatmap(hash, "checksum");
+        const beatmap = await api.lookupBeatmap(hash, "checksum");
         if (!beatmap) continue;
-        requests++;
 
         beatmapIDs.add(beatmap.beatmapset_id);
+        requests++;
     }
 
     return {
         beatmapIDs: Array.from(beatmapIDs),
         requests,
     };
+}
+
+/* ---------------- */
+/* Helper Functions */
+/* ---------------- */
+function extractUniqueHashes(collections: Collections): Set<string> {
+    const hashes = new Set<string>();
+
+    for (const col of collections.collection) {
+        for (const hash of col.beatmapsMd5) {
+            hashes.add(hash);
+        }
+    }
+
+    return hashes;
 }
