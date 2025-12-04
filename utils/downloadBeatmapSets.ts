@@ -21,15 +21,28 @@ export async function downloadBeatmapSets(beatmapIDs: number[], config: IConfigD
     }
 
     logger.info(`Initiating donwload of ${beatmapIDs.length} beatmap sets.`);
+    let mapsRemaining = beatmapIDs.length;
+    let mapsFailed = 0;
     for (const id of beatmapIDs) {
-        logger.info(`Downloading beatmapset ID: ${id}`);
+        const start = Date.now();
 
         const response = await fetch(`${Constant.OsuMirrorApiUrl}${id}`);
+        if (!response.ok) {
+            logger.error(`Failed to download beatmapset ID: ${id}. Status: ${response.status}`);
+            mapsFailed++;
+            mapsRemaining--;
+            continue;
+        }
 
         const beatmapBlob = await response.arrayBuffer();
         Bun.write(`${downloadDir}/${id}.osz`, beatmapBlob!);
+        mapsRemaining--;
 
-        logger.success(`Downloaded beatmapset ID: ${id}`);
+        const end = Date.now();
+        const timeTaken = ((end - start) / 1000).toFixed(2);
+        logger.success(`Downloaded beatmapset ID: ${id} - ${timeTaken}s.`);
+        logger.info(`${mapsRemaining} beatmap sets remaining. ${mapsFailed} failed.`);
+
         Bun.sleep(60);
     }
     logger.success("All beatmap sets downloaded.");
