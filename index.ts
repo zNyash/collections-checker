@@ -1,10 +1,7 @@
-import { existsSync, mkdirSync } from "fs";
-
 // Classes
 import { OsuPathFinder } from "./classes/OsuPathFinder";
 import { OsuDatabaseParser } from "./classes/OsuDatabaseParser";
 import { Config } from "./classes/Config";
-import { OsuApi } from "./classes/OsuApi";
 
 // Utility functions
 import { displayCollectionsInfo } from "./utils/displayCollectionsInfo";
@@ -24,8 +21,7 @@ async function main() {
     if (!(await shouldDownloadBeatmaps())) return;
 
     // const { beatmapIDs } = await collectBeatmapIds(collections, config);
-    downloadBeatmapSets([2071283], config);
+    downloadBeatmapSets([2421957], config);
 }
 
 main();
-
