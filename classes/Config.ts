@@ -1,12 +1,17 @@
 import chalk from "chalk";
 import prompts from "prompts";
+import { Logger } from "./Logger";
+
+const logger = Logger.getInstance();
 
 export interface IConfigData {
     clientID: string;
     clientSecret: string;
     token: string;
     tokenExpiration: number;
+    osuPath?: string;
 }
+
 export class Config {
     private static instance: Config;
 
@@ -15,6 +20,7 @@ export class Config {
         clientSecret: "",
         token: "",
         tokenExpiration: 0,
+        osuPath: "",
     };
 
     private constructor() {}
@@ -39,12 +45,10 @@ export class Config {
      * @returns Nothing.
      */
     private async createConfig(): Promise<void> {
-        console.log(chalk.red("config.cfg not found."));
-        console.log(chalk.blue("Please go to https://osu.ppy.sh/home/account/edit"));
-        console.log(
-            chalk.blue(
-                "Then on section 'OAuth', click on 'New OAuth Application' and fill the following fields:",
-            ),
+        logger.warn("config.cfg not found.");
+        logger.info("Please go to https://osu.ppy.sh/home/account/edit");
+        logger.info(
+            "Then on section 'OAuth', click on 'New OAuth Application' and fill the following fields:",
         );
 
         const response = await this.askUserForInfo();
@@ -52,11 +56,13 @@ export class Config {
         this.config = {
             clientID: response.Client_ID,
             clientSecret: response.Client_Secret,
-            token: this.config.token,
-            tokenExpiration: this.config.tokenExpiration,
+            token: "",
+            tokenExpiration: 0,
+            osuPath: "",
         };
 
         await this.writeConfig();
+        logger.success("Config file created successfully.");
 
         return;
     }
@@ -102,13 +108,14 @@ export class Config {
      * Reads the `config.cfg` file and updates the configuration object.
      */
     private async readConfig() {
-        console.log(chalk.grey("Reading config..."));
+        logger.info("Reading config...");
         const config = await Bun.file("config.cfg").json();
         this.config = {
             clientID: config.clientID,
             clientSecret: config.clientSecret,
             token: config.token,
             tokenExpiration: config.tokenExpiration,
+            osuPath: config.osuPath ?? "",
         };
     }
 
@@ -117,7 +124,6 @@ export class Config {
 
         if (!configExist) {
             await this.createConfig();
-            console.log(chalk.green("Config created & loaded."));
             return this.config;
         }
 

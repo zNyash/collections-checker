@@ -1,15 +1,16 @@
 // Logger.ts
 import chalk from "chalk";
 
-export type LogLevel = "debug" | "info" | "success" | "warn" | "error" | "fatal";
+export type LogLevel = "debug" | "info" | "success" | "warn" | "error" | "fatal" | "ask";
 
 const levelColors = {
     debug: chalk.magenta,
-    info: chalk.blue,
-    success: chalk.green,
-    warn: chalk.yellow,
-    error: chalk.red,
+    info: chalk.bgBlue,
+    success: chalk.bgGreen,
+    warn: chalk.bgYellow,
+    error: chalk.bgRed,
     fatal: chalk.bgRed.white.bold,
+    ask: chalk.bgGray,
 };
 
 export class Logger {
@@ -61,5 +62,9 @@ export class Logger {
 
     fatal(...msg: any[]) {
         this.log("fatal", ...msg);
+    }
+
+    ask(...msg: any[]) {
+        this.log("ask", ...msg);
     }
 }
