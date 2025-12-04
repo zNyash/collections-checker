@@ -3,4 +3,5 @@ export enum Constant {
     OsuMirrorRateLimitUrl = "https://catboy.best/api/ratelimits",
     OsuMirrorAltApiUrl = "https://osu.direct/api/d/",
     DownloadDir = "./beatmaps",
+    DownloadDelayMs = 525,
 }

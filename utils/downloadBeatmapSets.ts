@@ -40,7 +40,8 @@ export async function downloadBeatmapSets(beatmapIDs: number[], config: IConfigD
 
     for (const id of beatmapIDs) {
         ensureRateLimit(stats);
-        downloadSingleBeatmapSet(id, stats);
+        await downloadSingleBeatmapSet(id, stats);
+        Bun.sleep(Constant.DownloadDelayMs);
     }
 
     logger.success("All beatmap sets downloaded.");
@@ -49,7 +50,6 @@ export async function downloadBeatmapSets(beatmapIDs: number[], config: IConfigD
 /* ---------------- */
 /* Helper Functions */
 /* ---------------- */
-
 function prepareDownloadDirectory() {
     if (!existsSync(Constant.DownloadDir)) {
         mkdirSync(Constant.DownloadDir);
@@ -91,9 +91,10 @@ async function getRateLimitRemaining() {
 }
 
 function ensureRateLimit(stats: IStats) {
-    if (stats.remaining <= 10) {
-        logger.warn(`Only ${stats.remaining} downloads remaining. Try again later.`);
+    if (stats.RATELIMIT <= 10) {
+        logger.warn(`Only ${stats.RATELIMIT} downloads remaining. Try again later.`);
         logger.info(`You may close the application now.`);
+        // aqui é onde fica o warning tlgd? entao, complicado, olha oq eu to comparando.
         Bun.sleep(60 * 60 * 24 * 1000); // Sleep for 24 hours
     }
 }
