@@ -25,6 +25,11 @@ interface IStats {
  * @param config - Config object containing the osu! API token
  */
 export async function downloadBeatmapSets(beatmapIDs: number[], config: IConfigData) {
+    if (beatmapIDs.length === 0) {
+        logger.success("No missing beatmap sets to download.");
+        return;
+    }
+
     prepareDownloadDirectory();
 
     logger.info(`Initiating donwload of ${beatmapIDs.length} beatmap sets.`);
@@ -92,7 +97,6 @@ function ensureRateLimit(stats: IStats) {
     if (stats.RATELIMIT <= 10) {
         logger.warn(`Only ${stats.RATELIMIT} downloads remaining. Try again later.`);
         logger.info(`You may close the application now.`);
-        // aqui é onde fica o warning tlgd? entao, complicado, olha oq eu to comparando.
         Bun.sleep(60 * 60 * 24 * 1000); // Sleep for 24 hours
     }
 }

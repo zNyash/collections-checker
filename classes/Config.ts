@@ -8,7 +8,7 @@ export interface IConfigData {
     clientSecret: string;
     token: string;
     tokenExpiration: number;
-    osuPath?: string;
+    osuPath: string;
 }
 
 export class Config {
