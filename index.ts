@@ -20,8 +20,8 @@ async function main() {
     displayCollectionsInfo(collections);
     if (!(await shouldDownloadBeatmaps())) return;
 
-    // const { beatmapIDs } = await collectBeatmapIds(collections, config);
-    downloadBeatmapSets([2421957], config);
+    const { beatmapIDs } = await collectBeatmapIds(collections, config);
+    downloadBeatmapSets(beatmapIDs, config);
 }
 
 main();
